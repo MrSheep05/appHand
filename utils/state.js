@@ -13,6 +13,9 @@ export const reducer = (state, action) => {
     case "currentPose": {
       return { ...state, pose: action.payload };
     }
+    case "bleManager": {
+      return { ...state, manager: action.payload };
+    }
     default: {
       return { ...state };
     }
@@ -22,6 +25,7 @@ export const reducer = (state, action) => {
 const initialState = {
   camera: undefined,
   avialableRatio: undefined,
+  manager: undefined,
 };
 
 export const StateComponent = ({ children }) => {

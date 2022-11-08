@@ -1,13 +1,22 @@
 import CameraBox from "./components/CameraBox";
+import Bluetooth from "./components/Bluetooth";
+import Controls from "./components/Controls";
 import { StateComponent } from "./utils/state";
-import { BleManager } from "react-native-ble-plx";
 import { LogBox } from "react-native";
-LogBox.ignoreLogs(["new NativeEventEmitter"]);
-const manager = new BleManager();
+import { MemoryRouter, Routes, Route } from "react-router-dom";
+
+LogBox.ignoreAllLogs();
+
 export default function App() {
   return (
     <StateComponent>
-      <CameraBox />
+      <MemoryRouter>
+        <Routes>
+          <Route path="/camera" element={<CameraBox />} />
+          <Route path="/ble" element={<Bluetooth />} />
+          <Route path="/" element={<Controls />} />
+        </Routes>
+      </MemoryRouter>
     </StateComponent>
   );
 }

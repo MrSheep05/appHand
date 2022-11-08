@@ -4,7 +4,7 @@ import { View, Button, Dimensions, StatusBar, StyleSheet } from "react-native";
 import { Camera } from "expo-camera";
 import { StateContext } from "../utils/state";
 import { useRatio } from "../hooks/useRatio";
-
+import NavigateButton from "./NavigateButton";
 const { width } = Dimensions.get("window");
 const status = StatusBar.currentHeight;
 
@@ -32,6 +32,34 @@ const CameraBox = ({ takePhoto }) => {
     return divide(ratio) * styles.cam.width;
   };
 
+  const calculatePhoto = async () => {
+    const options = {
+      quality: 1,
+      base64: true,
+      exif: false,
+    };
+    const imgFile = await camera.takePictureAsync(options);
+    const response = await sendPicture(imgFile);
+    const parsed = Object.values(JSON.parse(response));
+    const positions = parsed.map((value) => {
+      const fl = parseFloat(value) * 180;
+      if (fl <= 0) return 0;
+      return fl > 180 ? 180 : parseInt(Math.round(fl));
+    });
+    dispatch({
+      type: "currentPose",
+      payload: {
+        pinky: positions[0],
+        ring: positions[1],
+        middle: positions[2],
+        index: positions[3],
+        thumb: positions[4],
+      },
+    });
+    console.log(parsed);
+    console.log(positions);
+  };
+
   useEffect(() => {
     (async () => {
       const camera = await Camera.requestCameraPermissionsAsync();
@@ -45,6 +73,7 @@ const CameraBox = ({ takePhoto }) => {
 
   return (
     <View>
+      <NavigateButton display="Manual controls" destination="/" />
       <Camera
         ref={(ref) => {
           setCamera(ref);
@@ -55,19 +84,7 @@ const CameraBox = ({ takePhoto }) => {
           dispatch({ type: "setCamera", payload: camera });
         }}
       />
-      <Button
-        onPress={async () => {
-          const options = {
-            quality: 1,
-            base64: true,
-            exif: false,
-          };
-          const imgFile = await camera.takePictureAsync(options);
-          const response = await sendPicture(imgFile);
-          console.log(response);
-        }}
-        title={"takePic"}
-      ></Button>
+      <Button onPress={calculatePhoto} title={"takePic"}></Button>
     </View>
   );
 };
