@@ -1,5 +1,6 @@
 import CameraBox from "./components/CameraBox";
 import Controls from "./components/Controls";
+import Bluetooth from "./components/Bluetooth";
 import { StateComponent } from "./utils/state";
 import { LogBox } from "react-native";
 import { MemoryRouter, Routes, Route } from "react-router-dom";
@@ -12,7 +13,8 @@ export default function App() {
       <MemoryRouter>
         <Routes>
           <Route path="/camera" element={<CameraBox />} />
-          <Route path="/" element={<Controls />} />
+          <Route path="/controls" element={<Controls />} />
+          <Route path="/" element={<Bluetooth />} />
         </Routes>
       </MemoryRouter>
     </StateComponent>

@@ -13,8 +13,8 @@ export const reducer = (state, action) => {
     case "currentPose": {
       return { ...state, pose: action.payload };
     }
-    case "bleManager": {
-      return { ...state, manager: action.payload };
+    case "setDevice": {
+      return { ...state, device: action.payload };
     }
     default: {
       return { ...state };
