@@ -9,54 +9,43 @@ import {
 import RNBluetoothClassic, {
   BluetoothDevice,
 } from "react-native-bluetooth-classic";
+import { useBloetooth } from "../hooks/useBluetooth";
 import Device from "./Device";
 const Bluetooth = () => {
   const [permission, setPermission] = useState(false);
   const [isLoading, setLoading] = useState(false);
-
-  const scan = async (connectName = false) => {
+  const [availableDevices, setAvailableDevices] = useState([]);
+  const bluetoothManager = useBloetooth();
+  const scan = async () => {
     setLoading(true);
-    const devices = await RNBluetoothClassic.startDiscovery();
+    const devices = await bluetoothManager.startDiscovery();
     const desired = devices.filter(({ name, address }) => {
-      console.log(name, address);
-
-      return !connectName ? name !== address : name === connectName;
+      return name !== address;
     });
-    if (connectName && desired.length === 1) {
-      const connection = await desired[0].connect();
-      console.log(connection);
-    }
     setLoading(false);
+    setAvailableDevices(desired);
   };
-
-  useEffect(() => {
-    async () => {
-      const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-        {
-          title: "Access fine location required for discovery",
-          message:
-            "In order to perform discovery, you must enable/allow " +
-            "fine location access.",
-          buttonNeutral: 'Ask Me Later"',
-          buttonNegative: "Cancel",
-          buttonPositive: "OK",
-        }
-      );
-      setPermission(granted);
-    };
-  }, []);
+  if (!bluetoothManager) {
+    return (
+      <View>
+        <Text>{"Enable Bluetooth first!"}</Text>
+      </View>
+    );
+  }
   return (
     <View>
       <Button
         title="Scan for devices"
         onPress={() => {
           if (!isLoading) {
-            scan();
+            scan("FilipBle");
           }
         }}
       />
       <ActivityIndicator animating={isLoading} />
+      {availableDevices.map((dev) => {
+        return <Device device={dev} key={dev.address}></Device>;
+      })}
     </View>
   );
 };

@@ -56,8 +56,6 @@ const CameraBox = ({ takePhoto }) => {
         thumb: positions[4],
       },
     });
-    console.log(parsed);
-    console.log(positions);
   };
 
   useEffect(() => {
@@ -73,7 +71,7 @@ const CameraBox = ({ takePhoto }) => {
 
   return (
     <View>
-      <NavigateButton display="Manual controls" destination="/" />
+      <NavigateButton display="Manual controls" destination="/controls" />
       <Camera
         ref={(ref) => {
           setCamera(ref);

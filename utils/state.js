@@ -11,6 +11,7 @@ export const reducer = (state, action) => {
       return { ...state, allRatios: action.payload };
     }
     case "currentPose": {
+      console.log(action.payload);
       return { ...state, pose: action.payload };
     }
     case "setDevice": {

@@ -2,7 +2,7 @@
   "name": "bleconnection",
   "version": "1.0.0",
   "scripts": {
-    "start": "expo start --dev-client",
+    "start": "expo start --dev-client --lan",
     "android": "expo run:android -d",
     "ios": "expo run:ios",
     "web": "expo start --web"

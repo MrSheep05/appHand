@@ -1,8 +1,8 @@
 import Slider from "@react-native-community/slider";
 import { useState, useRef } from "react";
 import { View, Text } from "react-native";
-const FingerSlider = ({ style, functions, name }) => {
-  const [value, setValue] = useState();
+const FingerSlider = ({ style, functions, name, startValue }) => {
+  const [value, setValue] = useState(startValue);
   return (
     <View>
       <Slider

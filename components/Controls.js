@@ -5,19 +5,15 @@ import FingerSlider from "./FingerSlider";
 import CheckBox from "@react-native-community/checkbox";
 import { StateContext } from "../utils/state";
 const Controls = () => {
-  const [values, setValues] = useState({
-    pinky: 0,
-    ring: 0,
-    middle: 0,
-    index: 0,
-    thumb: 0,
-  });
   const [checked, setChecked] = useState(false);
-  const { dispatch } = useContext(StateContext);
+  const { dispatch, state } = useContext(StateContext);
+  const [values, setValues] = useState(state.pose);
+
   const getValues = ({ key, value }) => {
     const updateValue = values;
     updateValue[key] = parseInt(Math.round(value));
-    setValues(updateValue);
+    console.log(updateValue);
+    // setValues(updateValue);
   };
 
   const ShowButton = () => {
@@ -41,7 +37,14 @@ const Controls = () => {
       <NavigateButton display="Camera" destination="/camera" />
       <CheckBox value={checked} onValueChange={() => setChecked(!checked)} />
       {Object.keys(values).map((key) => {
-        return <FingerSlider functions={getValues} name={key} key={key} />;
+        return (
+          <FingerSlider
+            functions={getValues}
+            name={key}
+            key={key}
+            startValue={state.pose[key]}
+          />
+        );
       })}
       <ShowButton />
     </View>
