@@ -1,18 +1,8 @@
 import { useEffect, useState } from "react";
-import {
-  PermissionsAndroid,
-  View,
-  Text,
-  Button,
-  ActivityIndicator,
-} from "react-native";
-import RNBluetoothClassic, {
-  BluetoothDevice,
-} from "react-native-bluetooth-classic";
+import { View, Text, Button, ActivityIndicator } from "react-native";
 import { useBloetooth } from "../hooks/useBluetooth";
 import Device from "./Device";
 const Bluetooth = () => {
-  const [permission, setPermission] = useState(false);
   const [isLoading, setLoading] = useState(false);
   const [availableDevices, setAvailableDevices] = useState([]);
   const bluetoothManager = useBloetooth();

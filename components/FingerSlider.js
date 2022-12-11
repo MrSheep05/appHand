@@ -10,8 +10,10 @@ const FingerSlider = ({ style, functions, name, startValue }) => {
         minimumValue={0}
         style={style}
         value={value}
+        onSlidingComplete={(value) => {
+          functions({ key: name, value });
+        }}
         onValueChange={(value) => {
-          functions({ value, key: name });
           setValue(value);
         }}
       />

@@ -1,5 +1,4 @@
 import { createContext, useReducer } from "react";
-
 export const StateContext = createContext();
 
 export const reducer = (state, action) => {
@@ -11,7 +10,11 @@ export const reducer = (state, action) => {
       return { ...state, allRatios: action.payload };
     }
     case "currentPose": {
-      console.log(action.payload);
+      console.log("send");
+      if (state.device) {
+        console.log("1");
+        state.device.write(JSON.stringify(action.payload));
+      }
       return { ...state, pose: action.payload };
     }
     case "setDevice": {
@@ -27,6 +30,14 @@ const initialState = {
   camera: undefined,
   avialableRatio: undefined,
   manager: undefined,
+  device: undefined,
+  pose: {
+    pinky: 0,
+    ring: 0,
+    middle: 0,
+    index: 0,
+    thumb: 0,
+  },
 };
 
 export const StateComponent = ({ children }) => {

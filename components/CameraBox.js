@@ -5,6 +5,8 @@ import { Camera } from "expo-camera";
 import { StateContext } from "../utils/state";
 import { useRatio } from "../hooks/useRatio";
 import NavigateButton from "./NavigateButton";
+import { useDevice } from "../hooks/useDevice";
+
 const { width } = Dimensions.get("window");
 const status = StatusBar.currentHeight;
 
@@ -27,6 +29,7 @@ const CameraBox = ({ takePhoto }) => {
   const { state, dispatch } = useContext(StateContext);
   const [permission, setPermission] = useState();
   const ratio = useRatio();
+  const a = useDevice();
 
   const setHeight = (ratio = "4:3") => {
     return divide(ratio) * styles.cam.width;

@@ -6,11 +6,13 @@ import { StateContext } from "../utils/state";
 
 const Device = ({ device }) => {
   const { dispatch } = useContext(StateContext);
+  const navigate = useNavigate();
   const connectToDevice = async () => {
     const isSuccessed = await device.connect();
     if (isSuccessed) {
+      device.write(JSON.stringify({ pinky: 1 }));
       dispatch({ type: "setDevice", payload: device });
-      useNavigate("/camera");
+      navigate("/camera");
     }
   };
   return (

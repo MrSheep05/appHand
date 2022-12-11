@@ -4,19 +4,16 @@ import RNBluetoothClassic, {
   BluetoothDevice,
 } from "react-native-bluetooth-classic";
 
-const isAchiveable = async () => {
-  const achievability = await RNBluetoothClassic.isBluetoothAvailable();
-  return achievability;
-};
 const powerOn = async () => {
   const check = await RNBluetoothClassic.isBluetoothEnabled();
   if (!check) {
-    RNBluetoothClassic.requestBluetoothEnabled().catch((error) => {});
+    check = RNBluetoothClassic.requestBluetoothEnabled().catch((error) => {});
   }
+  return check;
 };
 
 export const useBloetooth = () => {
-  const [isAvailable, setIsAvailable] = useState(false);
+  const [isAvailable, setIsAvailable] = useState(powerOn());
   useEffect(() => {
     async () => {
       const granted = await PermissionsAndroid.request(
