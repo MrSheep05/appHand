@@ -1,6 +1,6 @@
 import * as FS from "expo-file-system";
 import Constants from "expo-constants";
-
+import { Dimensions } from "react-native";
 const SERVER_PORT = 5000;
 const SERVER_ENDPOINTS = {
   calculate: "calculate",
@@ -25,4 +25,9 @@ export const divide = (ratio) => {
   });
 
   return a / b;
+};
+
+export const vmin = (percent) => {
+  const { height, width } = Dimensions.get("window");
+  return width > height ? (height * percent) / 100 : (width * percent) / 100;
 };

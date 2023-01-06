@@ -23,7 +23,7 @@ const Bluetooth = () => {
     );
   }
   return (
-    <View>
+    <View style={{ alignItems: "center" }}>
       <Button
         title="Scan for devices"
         onPress={() => {
@@ -32,11 +32,12 @@ const Bluetooth = () => {
           }
         }}
       />
-      <ActivityIndicator animating={isLoading} />
       {availableDevices.map((dev) => {
         return <Device device={dev} key={dev.address}></Device>;
       })}
+      <ActivityIndicator animating={isLoading} />
     </View>
   );
 };
+
 export default Bluetooth;
