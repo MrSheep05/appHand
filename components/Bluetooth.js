@@ -1,6 +1,13 @@
 import { useEffect, useState } from "react";
-import { View, Text, Button, ActivityIndicator } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  ActivityIndicator,
+  TouchableOpacity,
+} from "react-native";
 import { useBloetooth } from "../hooks/useBluetooth";
+import { vmin } from "../utils";
 import Device from "./Device";
 const Bluetooth = () => {
   const [isLoading, setLoading] = useState(false);
@@ -24,20 +31,40 @@ const Bluetooth = () => {
   }
   return (
     <View style={{ alignItems: "center" }}>
-      <Button
-        title="Scan for devices"
+      <TouchableOpacity
+        activeOpacity={!isLoading ? 0.2 : 1}
         onPress={() => {
           if (!isLoading) {
-            scan("FilipBle");
+            scan();
           }
         }}
-      />
-      {availableDevices.map((dev) => {
-        return <Device device={dev} key={dev.address}></Device>;
-      })}
+        style={{
+          ...styles.button,
+          backgroundColor: isLoading ? "black" : "blue",
+        }}
+      >
+        <Text style={styles.text}>Scan for devices</Text>
+      </TouchableOpacity>
+      <View>
+        {availableDevices.map((dev) => {
+          return <Device device={dev} key={dev.address}></Device>;
+        })}
+      </View>
+
       <ActivityIndicator animating={isLoading} />
     </View>
   );
 };
-
+const styles = StyleSheet.create({
+  button: {
+    width: "100%",
+    alignItems: "center",
+    height: 40,
+    justifyContent: "center",
+  },
+  text: {
+    fontSize: 20,
+    fontWeight: "bold",
+  },
+});
 export default Bluetooth;

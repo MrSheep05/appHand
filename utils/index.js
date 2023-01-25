@@ -15,7 +15,6 @@ export const sendPicture = async (image, name) => {
     headers: { "content-type": "image/jpeg", name },
     uploadType: FS.FileSystemUploadType.BINARY_CONTENT,
   });
-
   return response.body;
 };
 

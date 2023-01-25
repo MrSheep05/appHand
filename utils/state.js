@@ -10,9 +10,7 @@ export const reducer = (state, action) => {
       return { ...state, allRatios: action.payload };
     }
     case "currentPose": {
-      console.log("send");
       if (state.device) {
-        console.log("1");
         state.device.write(JSON.stringify(action.payload));
       }
       return { ...state, pose: action.payload };

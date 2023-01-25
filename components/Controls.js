@@ -1,4 +1,4 @@
-import { View, Button, TouchableHighlight } from "react-native";
+import { View, Button } from "react-native";
 import { useState, useEffect, useContext } from "react";
 import NavigateButton from "./NavigateButton";
 import FingerSlider from "./FingerSlider";
