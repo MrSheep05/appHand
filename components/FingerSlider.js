@@ -17,7 +17,7 @@ const FingerSlider = ({ style, functions, name, startValue }) => {
           setValue(value);
         }}
       />
-      <Text>{`Current value is ${parseInt(value)}`}</Text>
+      <Text>{`Current value of ${name} is ${parseInt(value)}`}</Text>
     </View>
   );
 };

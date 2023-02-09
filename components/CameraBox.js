@@ -8,7 +8,6 @@ import {
   StatusBar,
   StyleSheet,
   TouchableOpacity,
-  Button,
   ImageBackground,
 } from "react-native";
 import { Camera } from "expo-camera";
@@ -26,38 +25,39 @@ const options = {
   exif: false,
 };
 
-const CameraBox = ({ takePhoto }) => {
-  const [camera, setCamera] = useState(null);
-  const [permission, setPermission] = useState();
-  const [checked, setChecked] = useState(false);
-  const [isTaken, setIsTaken] = useState(false);
-  const [image, setImage] = useState();
+const CameraBox = () => {
+  console.warn("Create separated elements from CameraBox");
   const { state, dispatch } = useContext(StateContext);
-  const [values, setValues] = useState(state.pose);
+  const [inputs, setInput] = useState({
+    permission: undefined,
+    checked: false,
+    isTaken: false,
+    image: undefined,
+    values: state.pose,
+  });
+  const [camera, setCamera] = useState(null);
   const ratio = useRatio();
-  const device = useDevice();
+  useDevice();
 
   const setHeight = (ratio = "4:3") => {
     return divide(ratio) * width;
   };
 
   const sendData = () => {
-    console.log(values);
-    const name = Object.values(values).reduce((name, angle) => {
+    const name = Object.values(inputs.values).reduce((name, angle) => {
       return `${name}_${angle}`;
     });
-    sendPicture(image, `${name}_.jpeg`);
-    setImage(undefined);
-    setIsTaken(false);
+    sendPicture(inputs.image, `${name}_.jpeg`);
+    setInput((prev) => ({ ...prev, image: undefined, isTaken: false }));
   };
 
   const getValues = ({ key, value }) => {
     const bend = parseInt(value);
     if (isNaN(bend)) return false;
     if (bend >= 0 && bend <= 180) {
-      const updateValue = values;
+      const updateValue = inputs.values;
       updateValue[key] = Math.round((bend * 100) / 180) / 100;
-      setValues(updateValue);
+      setInput((prev) => ({ ...prev, values: updateValue }));
       return true;
     }
     return false;
@@ -65,9 +65,8 @@ const CameraBox = ({ takePhoto }) => {
 
   const takePicture = async () => {
     const imgFile = await camera.takePictureAsync(options);
-    if (checked) {
-      setImage(imgFile);
-      setIsTaken(true);
+    if (inputs.checked) {
+      setInput((prev) => ({ ...prev, image: imgFile, isTaken: true }));
     } else {
       const response = await sendPicture(imgFile);
       const parsed = Object.values(JSON.parse(response));
@@ -93,19 +92,22 @@ const CameraBox = ({ takePhoto }) => {
   useEffect(() => {
     (async () => {
       const camera = await Camera.requestCameraPermissionsAsync();
-      setPermission(camera.status === "granted");
+      setInput((prev) => ({
+        ...prev,
+        permission: camera.status === "granted",
+      }));
     })();
   }, []);
 
-  if (!permission) {
+  if (!inputs.permission) {
     return <View></View>;
   }
   return (
     <View>
       <NavigateButton display="Manual controls" destination="/controls" />
-      {isTaken ? (
+      {inputs.isTaken ? (
         <ImageBackground
-          source={image}
+          source={inputs.image}
           style={{ ...styles.cam, height: setHeight(ratio) }}
         >
           <View
@@ -126,7 +128,9 @@ const CameraBox = ({ takePhoto }) => {
                 ></NameBox>
               );
             })}
-            <Button title="hej" onPress={sendData}></Button>
+            <TouchableOpacity style={styles.snap} onPress={sendData}>
+              <Text style={styles.text}>Send</Text>
+            </TouchableOpacity>
           </View>
         </ImageBackground>
       ) : (
@@ -137,7 +141,7 @@ const CameraBox = ({ takePhoto }) => {
           ratio={ratio}
           style={{ ...styles.cam, height: setHeight(ratio) }}
           onCameraReady={() => {
-            dispatch({ type: "setCamera", payload: camera });
+            dispatch({ type: "setCamera", payload: inputs.camera });
           }}
         >
           <View style={{ ...styles.view, height: setHeight(ratio) - width }}>
@@ -147,8 +151,10 @@ const CameraBox = ({ takePhoto }) => {
             <View style={styles.checkView}>
               <Text style={{ ...styles.text }}>Testing data</Text>
               <CheckBox
-                value={checked}
-                onValueChange={(value) => setChecked(value)}
+                value={inputs.checked}
+                onValueChange={(value) => {
+                  setInput((prev) => ({ ...prev, checked: value }));
+                }}
               ></CheckBox>
             </View>
           </View>

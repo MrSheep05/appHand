@@ -4,7 +4,7 @@ import { TextInput, View, StyleSheet } from "react-native";
 const NameBox = ({ func }) => {
   const [value, setValue] = useState("");
   return (
-    <View>
+    <View style={{ alignSelf: "center" }}>
       <TextInput
         keyboardType="numeric"
         style={styles.input}
