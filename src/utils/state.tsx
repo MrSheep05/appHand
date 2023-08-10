@@ -7,7 +7,7 @@ export const StateContext = createContext(
 const reducer = (state: State, action: Action) => {
   switch (action.type) {
     case Actions.setDevice: {
-      return state;
+      return { ...state, currentDevice: action.payload };
     }
 
     default: {

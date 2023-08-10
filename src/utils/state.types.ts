@@ -6,9 +6,9 @@ export enum Actions {
 
 type SetDeviceAction = {
   type: Actions.setDevice;
-  payload: String;
+  payload?: Device;
 };
 
 export type State = {
-  // bleManager: BleManager;
+  currentDevice?: Device;
 };

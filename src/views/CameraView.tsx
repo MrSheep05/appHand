@@ -1,9 +1,10 @@
 import { View, Text } from "react-native";
+import { textStyle } from "../utils/styles";
 
 const CameraView = () => {
   return (
     <View>
-      <Text>{"Camera view page"}</Text>
+      <Text style={textStyle}>{"Camera view page"}</Text>
     </View>
   );
 };

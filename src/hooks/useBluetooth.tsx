@@ -1,34 +1,45 @@
 import { useContext, useEffect } from "react";
+import RNBluetoothClassic from "react-native-bluetooth-classic";
 import { StateContext } from "../utils/state";
-import RNBluetoothClassic, {
-  BluetoothDevice,
-} from "react-native-bluetooth-classic";
+import { useLocation, useNavigate } from "react-router-dom";
+import { Paths } from "../types/routes";
+import { Actions } from "../utils/state.types";
 
-const scan = async (duration: number): Promise<BluetoothDevice[]> => {
-  return await new Promise((resolve) => {
-    const a = RNBluetoothClassic.startDiscovery();
-    setTimeout(() => {
-      console.log("3 sec");
-      RNBluetoothClassic.cancelDiscovery();
-      resolve(a);
-    }, duration);
+const useBluetooth = (func?: () => Promise<void>) => {
+  const { dispatch } = useContext(StateContext);
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const navigateIf = (path: Paths) => {
+    const pathname =
+      location.pathname != "/" ? location.pathname.replaceAll("/", "") : "/";
+    if (pathname == path) return;
+    navigate(path);
+  };
+
+  RNBluetoothClassic.onBluetoothDisabled(() => {
+    dispatch({ type: Actions.setDevice });
+    navigateIf(Paths.BluetoothOffPage);
   });
-};
 
-const useBluetooth = () => {
-  const { state, dispatch } = useContext(StateContext);
+  RNBluetoothClassic.onBluetoothEnabled(() => {
+    navigateIf(Paths.BluetoothConnectionPage);
+  });
+
+  const checkInitialState = async () => {
+    const isEnabled = await RNBluetoothClassic.isBluetoothEnabled();
+    console.log(isEnabled);
+    if (isEnabled) {
+      if (func) await func();
+      return;
+    }
+    navigateIf(Paths.BluetoothOffPage);
+  };
 
   useEffect(() => {
-    const a = async () => {
-      console.log("USE EFFECT");
-      const devices = await scan(3000);
-      const finnal = devices
-        .filter((device) => device.name != device.address && device.name)
-        .map((device) => device.name);
-      console.log(finnal);
-      //
-    };
-    a().catch((err) => console.error(err));
+    console.log("useBlue Effect");
+    checkInitialState();
+    return () => {};
   }, []);
 };
 

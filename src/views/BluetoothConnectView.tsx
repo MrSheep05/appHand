@@ -1,10 +1,13 @@
 import { View, Text } from "react-native";
-import useBluetooth from "../hooks/useBluetooth";
+import useScan from "../hooks/useScan";
+import { textStyle, viewStyle } from "../utils/styles";
+
 const BluetoothConnectView = () => {
-  const a = useBluetooth();
+  const { devices, scan, connect } = useScan();
+
   return (
-    <View>
-      <Text>{"Bluetooth Connect Page"}</Text>
+    <View style={viewStyle}>
+      <Text style={textStyle}>{"Bluetooth Connect Page"}</Text>
     </View>
   );
 };

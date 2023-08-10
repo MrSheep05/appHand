@@ -1,9 +1,10 @@
 import { View, Text } from "react-native";
+import { textStyle } from "../utils/styles";
 
 const ControlsView = () => {
   return (
     <View>
-      <Text>{"Controls view page"}</Text>
+      <Text style={textStyle}>{"Controls view page"}</Text>
     </View>
   );
 };
