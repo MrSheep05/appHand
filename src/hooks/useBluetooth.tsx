@@ -1,25 +1,17 @@
 import { useContext, useEffect, useState } from "react";
 import RNBluetoothClassic from "react-native-bluetooth-classic";
 import { StateContext } from "../utils/state";
-import { useLocation, useNavigate } from "react-router-dom";
 import { Paths } from "../types/routes";
 import { Actions } from "../utils/state.types";
+import useNavigator from "./useNavigator";
 
 const useBluetooth = (
-  func?: () => Promise<void>
+  func?: () => Promise<any>
 ): (() => Promise<void>) | (() => void) => {
   const { dispatch } = useContext(StateContext);
   const [isEnabled, setIsEnabled] = useState<boolean>(false);
   const [isRequesting, setIsRequesting] = useState<boolean>(false);
-  const navigate = useNavigate();
-  const location = useLocation();
-
-  const navigateIf = (path: Paths) => {
-    const pathname =
-      location.pathname != "/" ? location.pathname.replaceAll("/", "") : "/";
-    if (pathname == path) return;
-    navigate(path);
-  };
+  const { navigate } = useNavigator();
 
   const requestBluetooth = async () => {
     setIsRequesting(true);
@@ -34,12 +26,12 @@ const useBluetooth = (
   RNBluetoothClassic.onBluetoothDisabled(() => {
     setIsEnabled(false);
     dispatch({ type: Actions.setDevice });
-    navigateIf(Paths.BluetoothOffPage);
+    navigate(Paths.BluetoothOffPage);
   });
 
   RNBluetoothClassic.onBluetoothEnabled(() => {
     setIsEnabled(true);
-    navigateIf(Paths.BluetoothConnectionPage);
+    navigate(Paths.BluetoothConnectionPage);
   });
 
   const checkInitialState = async () => {
@@ -49,7 +41,7 @@ const useBluetooth = (
       if (func) await func();
       return;
     }
-    navigateIf(Paths.BluetoothOffPage);
+    navigate(Paths.BluetoothOffPage);
   };
 
   useEffect(() => {

@@ -1,6 +1,6 @@
-import { View, Text, Button, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 import useBluetooth from "../hooks/useBluetooth";
-import { buttonStyle, textStyle, viewStyle } from "../utils/styles";
+import { buttonStyle, textStyle } from "../utils/styles";
 import Background from "../components/background";
 import Divider from "../components/divider";
 
@@ -8,10 +8,9 @@ const BluetoothOffView = () => {
   const requestBluetooth = useBluetooth();
   return (
     <Background
-      color={"#1C2128"}
       header={
         <Text style={{ ...textStyle, fontSize: 30, fontWeight: "500" }}>
-          {"Bluetooth Off Page"}
+          {" Bluetooth Off Page"}
         </Text>
       }
     >

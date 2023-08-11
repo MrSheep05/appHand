@@ -7,8 +7,8 @@ import {
 import { StateContext } from "../utils/state";
 import { Actions } from "../utils/state.types";
 import useBluetooth from "./useBluetooth";
-import { useNavigate } from "react-router-dom";
 import { Paths } from "../types/routes";
+import useNavigator from "./useNavigator";
 
 type UseScan = {
   devices: Device[];
@@ -21,7 +21,7 @@ const useScan = (): UseScan => {
   const { dispatch } = useContext(StateContext);
   const [devices, setDevices] = useState<Device[]>([]);
   const [isScanning, setIsScanning] = useState(false);
-  const navigate = useNavigate();
+  const { navigate } = useNavigator();
 
   const scan = async (duration: number = 3000) => {
     try {
@@ -49,7 +49,6 @@ const useScan = (): UseScan => {
   };
 
   useBluetooth(scan);
-
   return { devices, scan, connect, isScanning };
 };
 

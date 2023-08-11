@@ -1,6 +1,6 @@
 export enum Paths {
   BluetoothConnectionPage = "/",
-  CameraPage = "camera",
-  ControlsPage = "controls",
-  BluetoothOffPage = "bluetooth_off",
+  CameraPage = "/camera",
+  ControlsPage = "/controls",
+  BluetoothOffPage = "/bluetooth_off",
 }

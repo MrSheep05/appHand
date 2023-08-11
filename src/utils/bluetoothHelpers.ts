@@ -34,3 +34,19 @@ export const translateDevice = (device: BluetoothDevice): Device => {
 
 export const isBluetoothEnabled = async (): Promise<boolean> =>
   await RNBluetoothClassic.isBluetoothEnabled();
+
+export const bluetoothWrite = async (
+  device: Device,
+  message: Message
+): Promise<boolean> => {
+  try {
+    await RNBluetoothClassic.writeToDevice(
+      device.address,
+      JSON.stringify(message)
+    );
+    return true;
+  } catch (err) {
+    console.warn(err);
+    return false;
+  }
+};

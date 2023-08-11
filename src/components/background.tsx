@@ -6,11 +6,11 @@ type Children = JSX.Element | JSX.Element[];
 const Background = ({
   children,
   header,
-  color,
+  color = "#1C2128",
 }: {
   children: Children;
   header?: Children;
-  color: ColorValue;
+  color?: ColorValue;
 }) => {
   return (
     <View

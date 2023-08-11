@@ -16,7 +16,6 @@ const BluetoothConnectView = () => {
   const { devices, isScanning, scan, connect } = useScan();
   return (
     <Background
-      color={"#1C2128"}
       header={
         <Text style={{ ...textStyle, fontSize: 30, fontWeight: "500" }}>
           {"Bluetooth Connect Page"}

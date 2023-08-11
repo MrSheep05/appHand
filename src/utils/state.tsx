@@ -1,5 +1,6 @@
 import { createContext, useReducer } from "react";
 import { Action, Actions, State } from "./state.types";
+import { bluetoothWrite } from "./bluetoothHelpers";
 export const StateContext = createContext(
   {} as { state: State; dispatch: (action: Action) => void }
 );
@@ -10,6 +11,15 @@ const reducer = (state: State, action: Action) => {
       return { ...state, currentDevice: action.payload };
     }
 
+    case Actions.setPosition: {
+      if (state.currentDevice) {
+        bluetoothWrite(state.currentDevice, action.payload);
+        return {
+          ...state,
+          currentPosition: { ...state.currentPosition, ...action.payload },
+        };
+      }
+    }
     default: {
       return state;
     }
@@ -17,8 +27,14 @@ const reducer = (state: State, action: Action) => {
 };
 
 const initialState = {
-  // bleManager: new BleManager(),
-};
+  currentPosition: {
+    pinky: 180,
+    ring: 180,
+    middle: 180,
+    index: 180,
+    thumb: 180,
+  },
+} as State;
 
 export const StateComponent = ({
   children,

@@ -1,7 +1,8 @@
-export type Action = SetDeviceAction;
+export type Action = SetDeviceAction | SetPositionAction;
 
 export enum Actions {
   setDevice = "setDevice",
+  setPosition = "setPosition",
 }
 
 type SetDeviceAction = {
@@ -9,6 +10,26 @@ type SetDeviceAction = {
   payload?: Device;
 };
 
+type SetPositionAction = {
+  type: Actions.setPosition;
+  payload: Message;
+};
+
 export type State = {
   currentDevice?: Device;
+  currentPosition: {
+    pinky: number;
+    ring: number;
+    middle: number;
+    index: number;
+    thumb: number;
+  };
 };
+
+export enum FingerKeys {
+  pinky,
+  ring,
+  middle,
+  index,
+  thumb,
+}
