@@ -4,6 +4,7 @@ import { StateContext } from "../utils/state";
 import { Paths } from "../types/routes";
 import { Actions } from "../utils/state.types";
 import useNavigator from "./useNavigator";
+import Constants from "expo-constants";
 
 const useBluetooth = (
   func?: () => Promise<any>

@@ -17,15 +17,16 @@ type SetPositionAction = {
 
 export type State = {
   currentDevice?: Device;
-  currentPosition: {
-    pinky: number;
-    ring: number;
-    middle: number;
-    index: number;
-    thumb: number;
-  };
+  currentPosition: Fingers;
 };
 
+export type Fingers = {
+  pinky: number;
+  ring: number;
+  middle: number;
+  index: number;
+  thumb: number;
+};
 export enum FingerKeys {
   pinky,
   ring,

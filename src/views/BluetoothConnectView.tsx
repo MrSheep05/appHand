@@ -11,9 +11,11 @@ import useScan from "../hooks/useScan";
 import { buttonStyle, textStyle } from "../utils/styles";
 import DeviceTile from "../components/device_tile";
 import Background from "../components/background";
+import { useState } from "react";
 
 const BluetoothConnectView = () => {
   const { devices, isScanning, scan, connect } = useScan();
+  const [duration, setDuration] = useState(3000);
   return (
     <Background
       header={
@@ -27,7 +29,8 @@ const BluetoothConnectView = () => {
           disabled={isScanning}
           style={buttonStyle}
           onPress={async () => {
-            scan();
+            await scan(duration);
+            setDuration(duration * 1.25);
           }}
         >
           <Text
