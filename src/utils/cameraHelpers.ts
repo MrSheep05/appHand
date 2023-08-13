@@ -1,4 +1,4 @@
-import { Camera, PermissionResponse } from "expo-camera";
+import { Camera, CameraCapturedPicture, PermissionResponse } from "expo-camera";
 
 type CameraRequestType = (camera: PermissionResponse) => void;
 
@@ -9,8 +9,10 @@ export const cameraRequestPermissions = async (
   if (callback) callback(camera);
 };
 
-export const takePicture = async (camera: Camera) => {
-  const image = await camera.takePictureAsync({
+export const takePicture = async (
+  camera: Camera
+): Promise<CameraCapturedPicture> => {
+  return await camera.takePictureAsync({
     quality: 1,
     base64: true,
     exif: false,

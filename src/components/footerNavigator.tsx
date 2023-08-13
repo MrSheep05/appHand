@@ -36,8 +36,6 @@ const footerStyles = StyleSheet.create({
     borderColor: "#1D7870",
     bottom: 0,
     left: "-0.5%",
-    shadowColor: "#1D7870",
-    elevation: 1,
     backgroundColor: "#1C2128",
   },
 });

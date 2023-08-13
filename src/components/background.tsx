@@ -1,7 +1,6 @@
 import { ColorValue, StatusBar, View } from "react-native";
 import { bodyStyle, headerStyle } from "../utils/styles";
-
-type Children = JSX.Element | JSX.Element[];
+import { Children } from "../types";
 
 const Background = ({
   children,
