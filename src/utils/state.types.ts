@@ -18,6 +18,7 @@ type SetPositionAction = {
 export type State = {
   currentDevice?: Device;
   currentPosition: Fingers;
+  address?: string;
 };
 
 export type Fingers = {
@@ -28,9 +29,13 @@ export type Fingers = {
   thumb: number;
 };
 export enum FingerKeys {
-  pinky,
-  ring,
-  middle,
-  index,
-  thumb,
+  pinky = "pinky",
+  ring = "ring",
+  middle = "middle",
+  index = "index",
+  thumb = "thumb",
 }
+
+export const fingerKeys = Object.keys(FingerKeys).filter((key) =>
+  isNaN(Number(key))
+) as FingerKeys[];

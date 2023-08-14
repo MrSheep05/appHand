@@ -16,6 +16,7 @@ const styles = StyleSheet.create({
   text: {
     color: "#ffffff",
     alignSelf: "center",
+    justifyContent: "center",
   },
   button: {
     alignSelf: "center",

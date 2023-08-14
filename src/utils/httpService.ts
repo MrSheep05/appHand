@@ -12,14 +12,14 @@ enum EndPoints {
 }
 type Output = {
   positions?: Tuple<number, 5>;
-  status: boolean;
+  status: number;
 };
 
 export const sendPicture = async (
   image: CameraCapturedPicture,
   name?: string,
   address?: string
-) => {
+): Promise<Output> => {
   const endpoint = name ? EndPoints.save : EndPoints.calculate;
   const host = address
     ? address
@@ -30,20 +30,20 @@ export const sendPicture = async (
       headers: { "content-type": "image/jpeg", name: name ?? "none" },
       uploadType: FS.FileSystemUploadType.BINARY_CONTENT,
     });
-
-    if (name) {
+    if (!name) {
       const parsed = Object.values(JSON.parse(response.body)) as string[];
-      const positions: number[] = parsed.map((value) => {
+      console.log(parsed);
+      const positions = parsed.map((value) => {
         const fl = parseFloat(value) * 180;
         if (fl <= 0) return 0;
         return fl > 180 ? 180 : Math.round(fl);
-      });
-      return { status: true, positions };
+      }) as Tuple<number, 5>;
+      return { status: response.status, positions };
     }
-    return { status: true };
+    return { status: response.status };
   } catch (err) {
     console.warn(err);
-    return { status: false };
+    return { status: 500 };
   }
 };
 
@@ -52,5 +52,5 @@ export const parsePositionToName = (position: Fingers) => {
     (name, angle) => `${name}_${angle}`,
     ""
   );
-  return `${values}_.jpeg`;
+  return `${values.slice(1)}_.jpeg`;
 };
