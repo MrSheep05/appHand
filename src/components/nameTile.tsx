@@ -13,12 +13,11 @@ type Params = {
 const NameTile = ({ innerKey, func }: Params) => {
   const [value, setValue] = useState<string>("180");
 
-  useEffect(() => {
-    if (value == "") return;
+  const updateFunction = (value: string) => {
     if (!func({ key: innerKey, value })) {
       setValue("");
     }
-  }, [value]);
+  };
 
   return (
     <View
@@ -46,9 +45,7 @@ const NameTile = ({ innerKey, func }: Params) => {
           }}
           keyboardType="numeric"
           value={value}
-          onChangeText={(value) => {
-            setValue(value);
-          }}
+          onChangeText={(value) => updateFunction}
         />
       </View>
       <View
@@ -65,7 +62,9 @@ const NameTile = ({ innerKey, func }: Params) => {
             width: 50,
             height: 25,
           }}
-          onPress={() => setValue("180")}
+          onPress={() => {
+            updateFunction("180");
+          }}
         >
           <Text style={textStyle}> {"MAX"}</Text>
         </TouchableOpacity>
@@ -76,7 +75,7 @@ const NameTile = ({ innerKey, func }: Params) => {
             height: 25,
           }}
         >
-          <Text style={textStyle} onPress={() => setValue("0")}>
+          <Text style={textStyle} onPress={() => updateFunction("0")}>
             {"MIN"}
           </Text>
         </TouchableOpacity>

@@ -11,11 +11,13 @@ import useScan from "../hooks/useScan";
 import { buttonStyle, textStyle } from "../utils/styles";
 import DeviceTile from "../components/device_tile";
 import Background from "../components/background";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { StateContext } from "../utils/state";
 
 const BluetoothConnectView = () => {
   const { devices, isScanning, scan, connect } = useScan();
   const [duration, setDuration] = useState(3000);
+  const { state } = useContext(StateContext);
   return (
     <Background
       header={

@@ -37,6 +37,7 @@ const CameraView = () => {
   const width = vmin(100);
   const iconSize = vmin(10);
   const circleRadius = vmin(15);
+  console.log(state.currentPosition);
 
   const getValues = ({ key, value }: { key: FingerKeys; value: string }) => {
     const bend = parseInt(value);
@@ -59,7 +60,6 @@ const CameraView = () => {
 
     if (status === 200) {
       if (positions) {
-        console.log("DISPATCH");
         dispatch({
           type: Actions.setPosition,
           payload: {

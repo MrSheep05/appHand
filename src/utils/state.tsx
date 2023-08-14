@@ -12,13 +12,14 @@ const reducer = (state: State, action: Action) => {
     }
 
     case Actions.setPosition: {
-      if (state.currentDevice) {
-        bluetoothWrite(state.currentDevice, action.payload);
-        return {
-          ...state,
-          currentPosition: { ...state.currentPosition, ...action.payload },
-        };
-      }
+      console.log(state.currentPosition);
+      if (!state.currentDevice) return state;
+
+      bluetoothWrite(state.currentDevice, action.payload);
+      return {
+        ...state,
+        currentPosition: { ...state.currentPosition, ...action.payload },
+      };
     }
     default: {
       return state;
