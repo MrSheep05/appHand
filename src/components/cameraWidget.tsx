@@ -1,9 +1,7 @@
 import {Camera, PhotoFile, useCameraDevice} from 'react-native-vision-camera';
 import {Children} from '../types';
-import {useState} from 'react';
-import {vmin} from '../utils/styles';
-import {divideRatio} from '../utils/cameraHelpers';
-import {Image, ImageBackground, StyleSheet, View} from 'react-native';
+import {vmax, vmin} from '../utils/styles';
+import {ImageBackground, StyleSheet, Text, View} from 'react-native';
 
 const CameraOverlay = ({children}: {children?: Children}) => {
   return (
@@ -15,12 +13,10 @@ const CameraOverlay = ({children}: {children?: Children}) => {
         borderTopLeftRadius: 30,
         borderTopRightRadius: 30,
         display: 'flex',
-        height: '100%',
+        height: vmax(100) - vmin(100),
         width: '100%',
       }}>
-      <View style={{width: '100%', height: '100%', padding: 20}}>
-        {children}
-      </View>
+      {children}
     </View>
   );
 };
@@ -40,12 +36,19 @@ const CameraWidget = ({
   return (
     <View style={{width: '100%', height: '100%'}}>
       {image ? (
-        <Image
-          source={{uri: 'file://' + image.path}}
+        <ImageBackground
+          resizeMethod="resize"
+          imageStyle={{resizeMode: 'cover', objectFit: 'cover'}}
+          source={{
+            uri: 'file://' + image.path,
+            height: image.height,
+            width: image.width,
+          }}
           style={{width: '100%', height: '100%'}}
         />
       ) : (
         <Camera
+          orientation="portrait"
           ref={innerRef}
           style={StyleSheet.absoluteFill}
           device={device!}

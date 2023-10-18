@@ -55,11 +55,7 @@ const TestCamera = () => {
   };
 
   const predictBend = async (name?: string) => {
-    const {status, positions} = await sendPicture(
-      cameraData.image!,
-      name,
-      state.address,
-    );
+    const {status, positions} = await sendPicture(cameraData.image!, name);
 
     if (status === 200) {
       if (positions) {
@@ -106,65 +102,79 @@ const TestCamera = () => {
           <View
             style={{
               display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'space-around',
-              alignItems: 'center',
+              margin: 20,
+              height: '100%',
+              paddingBottom: vmin(15) + 30,
             }}>
-            <TouchableOpacity
+            <View
               style={{
-                ...buttonStyle,
-                height: circleRadius,
-                width: circleRadius,
-                borderRadius: circleRadius / 2,
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'space-around',
                 alignItems: 'center',
-              }}
-              onPress={async () => {
-                if (!camera.current) return;
-                const image = await camera.current.takePhoto();
-                setCameraData(prev => ({...prev, image}));
+                flex: 1,
               }}>
-              <Icon
-                name="camera-outline"
-                color={'#1D7870'}
-                size={iconSize}></Icon>
-            </TouchableOpacity>
-            <Checkbox
-              color={cameraData.testData ? '#1D7870' : '#1C2128'}
-              style={{height: iconSize, width: iconSize}}
-              value={cameraData.testData}
-              onValueChange={value =>
-                setCameraData(previous => ({
-                  ...previous,
-                  testData: value,
-                  image: undefined,
-                }))
-              }></Checkbox>
-          </View>
-          <View
-            style={{
-              display:
-                cameraData.testData && cameraData.image ? 'flex' : 'none',
-              height: '50%',
-              marginVertical: 10,
-            }}>
-            <View style={{flex: 5}}>
-              {fingerKeys.map(key => (
-                <NameTile key={key} innerKey={key} func={getValues} />
-              ))}
+              <TouchableOpacity
+                style={{
+                  ...buttonStyle,
+                  height: circleRadius,
+                  width: circleRadius,
+                  borderRadius: circleRadius / 2,
+                  alignItems: 'center',
+                }}
+                onPress={async () => {
+                  if (!camera.current) return;
+                  const image = await camera.current.takePhoto();
+                  setCameraData(prev => ({...prev, image}));
+                }}>
+                <Icon
+                  name="camera-outline"
+                  color={'#1D7870'}
+                  size={iconSize}></Icon>
+              </TouchableOpacity>
+              <Checkbox
+                color={cameraData.testData ? '#1D7870' : '#1C2128'}
+                style={{height: iconSize, width: iconSize}}
+                value={cameraData.testData}
+                onValueChange={value =>
+                  setCameraData(previous => ({
+                    ...previous,
+                    testData: value,
+                    image: undefined,
+                  }))
+                }></Checkbox>
             </View>
-            <TouchableOpacity
-              style={{...buttonStyle, flex: 1}}
-              onPress={async () => {
-                const name = parsePositionToName(namePosition);
-                await predictBend(name);
-                setCameraData(previous => ({
-                  ...previous,
-                  image: undefined,
-                  testData: false,
-                }));
+            <View
+              style={{
+                marginVertical: 10,
+                flex: 6,
               }}>
-              <Text style={textStyle}>{'Send test data'}</Text>
-            </TouchableOpacity>
+              <View
+                style={{
+                  display:
+                    cameraData.testData && cameraData.image ? 'flex' : 'none',
+                  height: '100%',
+                }}>
+                <View style={{flex: 6}}>
+                  {fingerKeys.map(key => (
+                    <NameTile key={key} innerKey={key} func={getValues} />
+                  ))}
+                </View>
+                <TouchableOpacity
+                  style={{...buttonStyle, flex: 1}}
+                  onPress={async () => {
+                    const name = parsePositionToName(namePosition);
+                    await predictBend(name);
+                    setCameraData(previous => ({
+                      ...previous,
+                      image: undefined,
+                      testData: false,
+                    }));
+                  }}>
+                  <Text style={textStyle}>{'Send test data'}</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
           </View>
         </CameraWidget>
       ) : (
