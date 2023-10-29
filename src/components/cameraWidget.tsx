@@ -1,4 +1,10 @@
-import {Camera, PhotoFile, useCameraDevice} from 'react-native-vision-camera';
+import {
+  Camera,
+  PhotoFile,
+  runAsync,
+  useCameraDevice,
+  useFrameProcessor,
+} from 'react-native-vision-camera';
 import {Children} from '../types';
 import {vmax, vmin} from '../utils/styles';
 import {ImageBackground, StyleSheet, Text, View} from 'react-native';
@@ -25,14 +31,24 @@ const CameraWidget = ({
   children,
   innerRef,
   image,
+  isRecording,
 }: {
   children?: Children;
   innerRef: React.RefObject<Camera>;
+  isRecording: boolean;
   image?: PhotoFile;
 }) => {
+  const frameProcessor = useFrameProcessor(frame => {
+    'worklet';
+    runAsync(frame, () => {
+      'worklet';
+      new Promise(resolve => setTimeout(resolve, 1000));
+    });
+  }, []);
   const device = useCameraDevice('back', {
     physicalDevices: ['ultra-wide-angle-camera'],
   });
+  // const devices = useCameraDevices();
   return (
     <View style={{width: '100%', height: '100%'}}>
       {image ? (
@@ -48,6 +64,7 @@ const CameraWidget = ({
         />
       ) : (
         <Camera
+          frameProcessor={isRecording ? frameProcessor : undefined}
           orientation="portrait"
           ref={innerRef}
           style={StyleSheet.absoluteFill}

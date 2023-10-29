@@ -1,22 +1,21 @@
-import {Camera, CameraCapturedPicture, PermissionResponse} from 'expo-camera';
-type CameraRequestType = (camera: PermissionResponse) => void;
+// type CameraRequestType = (camera: PermissionResponse) => void;
 
-export const cameraRequestPermissions = async (
-  callback?: CameraRequestType,
-): Promise<void> => {
-  const camera = await Camera.requestCameraPermissionsAsync();
-  if (callback) callback(camera);
-};
+// export const cameraRequestPermissions = async (
+//   callback?: CameraRequestType,
+// ): Promise<void> => {
+//   const camera = await Camera.requestCameraPermissionsAsync();
+//   if (callback) callback(camera);
+// };
 
-export const takePicture = async (
-  camera: Camera,
-): Promise<CameraCapturedPicture> => {
-  return await camera.takePictureAsync({
-    quality: 1,
-    base64: true,
-    exif: false,
-  });
-};
+// export const takePicture = async (
+//   camera: Camera,
+// ): Promise<CameraCapturedPicture> => {
+//   return await camera.takePictureAsync({
+//     quality: 1,
+//     base64: true,
+//     exif: false,
+//   });
+// };
 
 export const divideRatio = (ratio: string) => {
   const ratios = ratio.split(':').map(num => parseInt(num));

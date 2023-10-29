@@ -2,7 +2,6 @@
 // import {Camera, useCameraDevice} from 'react-native-vision-camera';
 
 import {useContext, useEffect, useRef, useState} from 'react';
-import {cameraRequestPermissions, takePicture} from '../utils/cameraHelpers';
 import useDevice from '../hooks/useDevice';
 import {Actions, FingerKeys, Fingers, fingerKeys} from '../utils/state.types';
 import {StateContext} from '../utils/state';
@@ -16,22 +15,24 @@ import Checkbox from 'expo-checkbox';
 import NameTile from '../components/nameTile';
 import FooterNavigator from '../components/footerNavigator';
 import {Camera, PhotoFile} from 'react-native-vision-camera';
+import useCamera from '../hooks/useCamera';
 
 type CameraData = {
-  permissions: boolean;
   height: number;
   image?: PhotoFile;
   testData: boolean;
+  recording: boolean;
 };
 
 const initialCameraData = {
-  permissions: false,
   height: 0,
   testData: false,
+  recording: false,
 } as CameraData;
 
 const TestCamera = () => {
-  useDevice();
+  // useDevice();
+  const permissions = useCamera();
   const {state, dispatch} = useContext(StateContext);
   const [namePosition, setNamePosition] = useState<Fingers>(
     state.currentPosition,
@@ -72,16 +73,7 @@ const TestCamera = () => {
         setCameraData(previous => ({...previous, image: undefined}));
       }
     }
-    console.log(`STATUS CODE ${status}`);
   };
-  useEffect(() => {
-    cameraRequestPermissions(permission =>
-      setCameraData(previous => ({
-        ...previous,
-        permissions: permission.status === 'granted',
-      })),
-    );
-  }, []);
 
   useEffect(() => {
     if (cameraData.image && !cameraData.testData) {
@@ -97,8 +89,11 @@ const TestCamera = () => {
         display: 'flex',
         backgroundColor: '#1C2128',
       }}>
-      {cameraData.permissions ? (
-        <CameraWidget innerRef={camera} image={cameraData.image}>
+      {permissions ? (
+        <CameraWidget
+          innerRef={camera}
+          image={cameraData.image}
+          isRecording={cameraData.recording}>
           <View
             style={{
               display: 'flex',
@@ -129,6 +124,23 @@ const TestCamera = () => {
                 }}>
                 <Icon
                   name="camera-outline"
+                  color={'#1D7870'}
+                  size={iconSize}></Icon>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={{
+                  ...buttonStyle,
+                  height: circleRadius,
+                  width: circleRadius,
+                  borderRadius: circleRadius / 2,
+                  alignItems: 'center',
+                }}
+                onPress={() => {
+                  const {recording} = cameraData;
+                  setCameraData(prev => ({...prev, recording: !recording}));
+                }}>
+                <Icon
+                  name="camera-enhance-outline"
                   color={'#1D7870'}
                   size={iconSize}></Icon>
               </TouchableOpacity>

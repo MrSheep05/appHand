@@ -1,3 +1,4 @@
 module.exports = {
-  presets: ['babel-preset-expo'],
+  presets: ['module:metro-react-native-babel-preset', 'babel-preset-expo'],
+  plugins: [['react-native-worklets-core/plugin']],
 };
