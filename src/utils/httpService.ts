@@ -1,4 +1,3 @@
-import {CameraCapturedPicture} from 'expo-camera';
 import Constants from 'expo-constants';
 import * as FS from 'expo-file-system';
 import {Tuple} from '../types/tuple';
@@ -17,14 +16,14 @@ type Output = {
 };
 
 export const sendPicture = async (
-  image: PhotoFile,
+  imageUrl: string,
   name?: string,
   address?: string,
 ): Promise<Output> => {
   const endpoint = name ? EndPoints.save : EndPoints.calculate;
-  const url = `http://192.168.50.214:${SERVER_PORT}/${endpoint}`;
+  const url = `http://192.168.196.214:${SERVER_PORT}/${endpoint}`;
   try {
-    const response = await FS.uploadAsync(url, image.path, {
+    const response = await FS.uploadAsync(url, imageUrl, {
       headers: {'content-type': 'image/jpeg', name: name ?? 'none'},
       uploadType: FS.FileSystemUploadType.BINARY_CONTENT,
     });

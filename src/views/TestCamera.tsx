@@ -16,6 +16,7 @@ import NameTile from '../components/nameTile';
 import FooterNavigator from '../components/footerNavigator';
 import {Camera, PhotoFile} from 'react-native-vision-camera';
 import useCamera from '../hooks/useCamera';
+import usePredictBend from '../hooks/usePredictBend';
 
 type CameraData = {
   height: number;
@@ -32,6 +33,7 @@ const initialCameraData = {
 
 const TestCamera = () => {
   // useDevice();
+  const {sendData} = usePredictBend();
   const permissions = useCamera();
   const {state, dispatch} = useContext(StateContext);
   const [namePosition, setNamePosition] = useState<Fingers>(
@@ -55,29 +57,11 @@ const TestCamera = () => {
     return false;
   };
 
-  const predictBend = async (name?: string) => {
-    const {status, positions} = await sendPicture(cameraData.image!, name);
-
-    if (status === 200) {
-      if (positions) {
-        dispatch({
-          type: Actions.setPosition,
-          payload: {
-            pinky: positions[0],
-            ring: positions[1],
-            middle: positions[2],
-            index: positions[3],
-            thumb: positions[4],
-          },
-        });
-        setCameraData(previous => ({...previous, image: undefined}));
-      }
-    }
-  };
-
   useEffect(() => {
     if (cameraData.image && !cameraData.testData) {
-      predictBend();
+      sendData({imageUrl: cameraData.image.path}, () =>
+        setCameraData(previous => ({...previous, image: undefined})),
+      );
     }
   }, [cameraData.image]);
 
@@ -175,13 +159,20 @@ const TestCamera = () => {
                 <TouchableOpacity
                   style={{...buttonStyle, flex: 1}}
                   onPress={async () => {
+                    if (!cameraData.image) return;
                     const name = parsePositionToName(namePosition);
-                    await predictBend(name);
-                    setCameraData(previous => ({
-                      ...previous,
-                      image: undefined,
-                      testData: false,
-                    }));
+                    await sendData(
+                      {
+                        imageUrl: cameraData.image.path,
+                        name,
+                      },
+                      () =>
+                        setCameraData(previous => ({
+                          ...previous,
+                          image: undefined,
+                          testData: false,
+                        })),
+                    );
                   }}>
                   <Text style={textStyle}>{'Send test data'}</Text>
                 </TouchableOpacity>

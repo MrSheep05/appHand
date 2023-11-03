@@ -1,14 +1,14 @@
-import { createContext, useReducer } from "react";
-import { Action, Actions, State } from "./state.types";
-import { bluetoothWrite } from "./bluetoothHelpers";
+import {createContext, useReducer} from 'react';
+import {Action, Actions, State} from './state.types';
+import {bluetoothWrite} from './bluetoothHelpers';
 export const StateContext = createContext(
-  {} as { state: State; dispatch: (action: Action) => void }
+  {} as {state: State; dispatch: (action: Action) => void},
 );
 
 const reducer = (state: State, action: Action) => {
   switch (action.type) {
     case Actions.setDevice: {
-      return { ...state, currentDevice: action.payload };
+      return {...state, currentDevice: action.payload};
     }
 
     case Actions.setPosition: {
@@ -16,7 +16,7 @@ const reducer = (state: State, action: Action) => {
         bluetoothWrite(state.currentDevice, action.payload);
         return {
           ...state,
-          currentPosition: { ...state.currentPosition, ...action.payload },
+          currentPosition: {...state.currentPosition, ...action.payload},
         };
       }
     }
@@ -44,7 +44,7 @@ export const StateComponent = ({
   const [state, dispatch] = useReducer(reducer, initialState);
 
   return (
-    <StateContext.Provider value={{ state, dispatch }}>
+    <StateContext.Provider value={{state, dispatch}}>
       {children}
     </StateContext.Provider>
   );
