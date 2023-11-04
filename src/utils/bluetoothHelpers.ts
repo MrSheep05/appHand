@@ -1,9 +1,9 @@
 import RNBluetoothClassic, {
   BluetoothDevice,
-} from "react-native-bluetooth-classic";
+} from 'react-native-bluetooth-classic';
 
 export const bluetoothScan = async (
-  duration: number
+  duration: number,
 ): Promise<BluetoothDevice[]> => {
   return await new Promise((resolve, reject) => {
     try {
@@ -28,8 +28,8 @@ export const bluetoothConnect = async (device: Device): Promise<boolean> => {
 };
 
 export const translateDevice = (device: BluetoothDevice): Device => {
-  const { name, address } = device;
-  return { name, address };
+  const {name, address} = device;
+  return {name, address};
 };
 
 export const isBluetoothEnabled = async (): Promise<boolean> =>
@@ -37,12 +37,12 @@ export const isBluetoothEnabled = async (): Promise<boolean> =>
 
 export const bluetoothWrite = async (
   device: Device,
-  message: Message
+  message: Message,
 ): Promise<boolean> => {
   try {
     await RNBluetoothClassic.writeToDevice(
       device.address,
-      JSON.stringify(message)
+      JSON.stringify(message),
     );
     return true;
   } catch (err) {

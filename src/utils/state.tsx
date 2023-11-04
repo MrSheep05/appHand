@@ -13,6 +13,7 @@ const reducer = (state: State, action: Action) => {
 
     case Actions.setPosition: {
       if (state.currentDevice) {
+        console.log('Bluetooth');
         bluetoothWrite(state.currentDevice, action.payload);
         return {
           ...state,

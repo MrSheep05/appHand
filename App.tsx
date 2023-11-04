@@ -14,9 +14,9 @@ export default function App() {
     <StateComponent>
       <MemoryRouter>
         <Routes>
-          <Route path={'/'} element={<TestCamera />}></Route>
+          <Route path={Paths.CameraPage} element={<TestCamera />}></Route>
           <Route
-            path={Paths.BluetoothConnectionPage + 'aa'}
+            path={Paths.BluetoothConnectionPage}
             element={<BluetoothConnectView />}
           />
           <Route path={Paths.BluetoothOffPage} element={<BluetoothOffView />} />

@@ -11,7 +11,7 @@ enum EndPoints {
   save = 'save',
 }
 type Output = {
-  positions?: Tuple<number, 5>;
+  positions?: Message;
   status: number;
 };
 
@@ -28,13 +28,7 @@ export const sendPicture = async (
       uploadType: FS.FileSystemUploadType.BINARY_CONTENT,
     });
     if (!name) {
-      const parsed = Object.values(JSON.parse(response.body)) as string[];
-      console.log(parsed);
-      const positions = parsed.map(value => {
-        const fl = parseFloat(value) * 180;
-        if (fl <= 0) return 0;
-        return fl > 180 ? 180 : Math.round(fl);
-      }) as Tuple<number, 5>;
+      const positions = JSON.parse(response.body);
       return {status: response.status, positions};
     }
     return {status: response.status};

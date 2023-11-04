@@ -23,13 +23,7 @@ const usePredictBend = (): usePredictOutput => {
       if (positions) {
         dispatch({
           type: Actions.setPosition,
-          payload: {
-            pinky: positions[0],
-            ring: positions[1],
-            middle: positions[2],
-            index: positions[3],
-            thumb: positions[4],
-          },
+          payload: positions,
         });
       }
     }

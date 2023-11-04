@@ -9,10 +9,13 @@ import {
 import {Children} from '../types';
 import {vmax, vmin} from '../utils/styles';
 import {ImageBackground, Platform, StyleSheet, Text, View} from 'react-native';
-import {useCallback, useEffect, useState} from 'react';
+import {useCallback, useContext, useEffect, useState} from 'react';
 import usePredictBend from '../hooks/usePredictBend';
 import {Worklets} from 'react-native-worklets-core';
 import {predictArmBend} from '../utils/armFrameProcessorPlugin';
+import useDevice from '../hooks/useDevice';
+import {StateContext} from '../utils/state';
+import {Actions} from '../utils/state.types';
 
 const CameraOverlay = ({children}: {children?: Children}) => {
   return (
@@ -31,6 +34,7 @@ const CameraOverlay = ({children}: {children?: Children}) => {
     </View>
   );
 };
+//ඞ
 
 const CameraWidget = ({
   children,
@@ -43,7 +47,15 @@ const CameraWidget = ({
   isRecording: boolean;
   image?: PhotoFile;
 }) => {
+  useDevice();
+  const {dispatch} = useContext(StateContext);
   const {sendData} = usePredictBend();
+  const update = Worklets.createRunInJsFn((data: Message) =>
+    dispatch({
+      type: Actions.setPosition,
+      payload: data,
+    }),
+  );
   const frameProcessor = useFrameProcessor(frame => {
     'worklet';
     runAsync(frame, () => {
@@ -52,7 +64,10 @@ const CameraWidget = ({
         const res = predictArmBend(frame, {
           address: 'http://192.168.196.214:5000/calculate',
         });
-        console.log(res);
+        if (res) {
+          const data = JSON.parse(res) as Message;
+          update(data);
+        }
       }
     });
   }, []);
