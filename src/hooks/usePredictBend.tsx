@@ -18,7 +18,7 @@ const usePredictBend = (): usePredictOutput => {
     name?: string,
   ): Promise<number> => {
     const {status, positions} = await sendPicture(imageUrl, name);
-
+    console.log(name);
     if (status === 200) {
       if (positions) {
         dispatch({

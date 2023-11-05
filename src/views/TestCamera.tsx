@@ -17,6 +17,7 @@ import FooterNavigator from '../components/footerNavigator';
 import {Camera, PhotoFile} from 'react-native-vision-camera';
 import useCamera from '../hooks/useCamera';
 import usePredictBend from '../hooks/usePredictBend';
+import {normalizePosition} from '../utils';
 
 type CameraData = {
   height: number;
@@ -37,7 +38,7 @@ const TestCamera = () => {
   const permissions = useCamera();
   const {state, dispatch} = useContext(StateContext);
   const [namePosition, setNamePosition] = useState<Fingers>(
-    state.currentPosition,
+    normalizePosition(state.currentPosition),
   );
   const [cameraData, setCameraData] = useState<CameraData>(initialCameraData);
   const camera = useRef<Camera>(null);
