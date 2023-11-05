@@ -10,3 +10,5 @@ export const normalizePosition = (position: Fingers): Fingers => {
     return {...prev, [value]: position[value as keyof Fingers] / 180};
   }, {} as Fingers);
 };
+
+export const SERVER_ADDRESS = 'http://192.168.196.214:5000';

@@ -16,6 +16,7 @@ import {predictArmBend} from '../utils/armFrameProcessorPlugin';
 import useDevice from '../hooks/useDevice';
 import {StateContext} from '../utils/state';
 import {Actions} from '../utils/state.types';
+import {SERVER_ADDRESS} from '../utils';
 
 const CameraOverlay = ({children}: {children?: Children}) => {
   return (
@@ -62,7 +63,7 @@ const CameraWidget = ({
       'worklet';
       if (frame !== null) {
         const res = predictArmBend(frame, {
-          address: 'http://192.168.196.214:5000/calculate',
+          address: `${SERVER_ADDRESS}/calculate`,
         });
         if (res) {
           const data = JSON.parse(res) as Message;

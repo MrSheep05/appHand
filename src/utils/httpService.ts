@@ -3,8 +3,7 @@ import * as FS from 'expo-file-system';
 import {Tuple} from '../types/tuple';
 import {Fingers} from './state.types';
 import {PhotoFile} from 'react-native-vision-camera';
-
-const SERVER_PORT = 5000;
+import {SERVER_ADDRESS} from '.';
 
 enum EndPoints {
   calculate = 'calculate',
@@ -21,7 +20,7 @@ export const sendPicture = async (
   address?: string,
 ): Promise<Output> => {
   const endpoint = name ? EndPoints.save : EndPoints.calculate;
-  const url = `http://192.168.196.214:${SERVER_PORT}/${endpoint}`;
+  const url = `${SERVER_ADDRESS}/${endpoint}`;
   try {
     const response = await FS.uploadAsync(url, imageUrl, {
       headers: {'content-type': 'image/jpeg', name: name ?? 'none'},
