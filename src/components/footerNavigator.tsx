@@ -2,19 +2,19 @@ import {View, StyleSheet, TouchableOpacity} from 'react-native';
 import useNavigator from '../hooks/useNavigator';
 import {vmin} from '../utils/styles';
 import {Paths} from '../types/routes';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Icon, {Icons} from './icon';
 
 const FooterNavigator = () => {
   return (
     <View style={footerStyles.footer}>
       <NavigateIcon
         path={Paths.CameraPage}
-        iconsName={['camera-enhance', 'camera-enhance-outline']}
+        iconsName={[Icons.CameraEnhance, Icons.CameraEnhanceOutline]}
       />
       <NavigateIcon
         path={Paths.ControlsPage}
         size={vmin(11)}
-        iconsName={['controller-classic', 'controller-classic-outline']}
+        iconsName={[Icons.Controller, Icons.ControllerOutline]}
       />
     </View>
   );
@@ -48,7 +48,7 @@ const NavigateIcon = ({
   size = vmin(10),
 }: {
   path: Paths;
-  iconsName: [string, string];
+  iconsName: [Icons, Icons];
   size?: number;
 }) => {
   const {currentPath, navigate} = useNavigator();
@@ -57,9 +57,9 @@ const NavigateIcon = ({
       onPress={() => navigate(path)}
       style={{justifyContent: 'center', alignContent: 'center'}}>
       {path == currentPath ? (
-        <Icon name={iconsName[0]} size={size} color="#1D7870" />
+        <Icon icon={iconsName[0]} size={size} color="#1D7870" />
       ) : (
-        <Icon name={iconsName[1]} size={size} color="white" />
+        <Icon icon={iconsName[1]} size={size} color="white" />
       )}
     </TouchableOpacity>
   );

@@ -3,7 +3,6 @@ import {FingerKeys} from '../utils/state.types';
 import {useEffect, useState} from 'react';
 import {buttonStyle, textStyle} from '../utils/styles';
 import {capitilize} from '../utils';
-import {Touchable} from 'react-native';
 
 type Params = {
   innerKey: FingerKeys;
@@ -16,6 +15,8 @@ const NameTile = ({innerKey, func}: Params) => {
   const updateFunction = (value: string) => {
     if (!func({key: innerKey, value})) {
       setValue('');
+    } else {
+      setValue(value);
     }
   };
 
@@ -44,7 +45,7 @@ const NameTile = ({innerKey, func}: Params) => {
           }}
           keyboardType="numeric"
           value={value}
-          onChangeText={value => updateFunction}
+          onChangeText={value => updateFunction(value)}
         />
       </View>
       <View
@@ -70,10 +71,9 @@ const NameTile = ({innerKey, func}: Params) => {
             ...buttonStyle,
             width: 50,
             height: 25,
-          }}>
-          <Text style={textStyle} onPress={() => updateFunction('0')}>
-            {'MIN'}
-          </Text>
+          }}
+          onPress={() => updateFunction('0')}>
+          <Text style={textStyle}>{'MIN'}</Text>
         </TouchableOpacity>
       </View>
     </View>

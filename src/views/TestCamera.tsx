@@ -3,13 +3,12 @@
 
 import {useContext, useEffect, useRef, useState} from 'react';
 import useDevice from '../hooks/useDevice';
-import {Actions, FingerKeys, Fingers, fingerKeys} from '../utils/state.types';
+import {FingerKeys, Fingers, fingerKeys} from '../utils/state.types';
 import {StateContext} from '../utils/state';
 import {buttonStyle, textStyle, vmin} from '../utils/styles';
-import {parsePositionToName, sendPicture} from '../utils/httpService';
-import {Text, TouchableOpacity, View} from 'react-native';
+import {parsePositionToName} from '../utils/httpService';
+import {ScrollView, Text, TouchableOpacity, View} from 'react-native';
 import CameraWidget from '../components/cameraWidget';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import Checkbox from 'expo-checkbox';
 import NameTile from '../components/nameTile';
@@ -18,6 +17,7 @@ import {Camera, PhotoFile} from 'react-native-vision-camera';
 import useCamera from '../hooks/useCamera';
 import usePredictBend from '../hooks/usePredictBend';
 import {normalizePosition} from '../utils';
+import Icon, {Icons} from '../components/icon';
 
 type CameraData = {
   height: number;
@@ -33,7 +33,7 @@ const initialCameraData = {
 } as CameraData;
 
 const TestCamera = () => {
-  // useDevice();
+  useDevice();
   const {sendData} = usePredictBend();
   const permissions = useCamera();
   const {state, dispatch} = useContext(StateContext);
@@ -67,7 +67,8 @@ const TestCamera = () => {
   }, [cameraData.image]);
 
   return (
-    <View
+    <ScrollView
+      automaticallyAdjustKeyboardInsets={true}
       style={{
         height: '100%',
         width: '100%',
@@ -94,24 +95,26 @@ const TestCamera = () => {
                 alignItems: 'center',
                 flex: 1,
               }}>
-              <TouchableOpacity
-                style={{
-                  ...buttonStyle,
-                  height: circleRadius,
-                  width: circleRadius,
-                  borderRadius: circleRadius / 2,
-                  alignItems: 'center',
-                }}
-                onPress={async () => {
-                  if (!camera.current) return;
-                  const image = await camera.current.takePhoto();
-                  setCameraData(prev => ({...prev, image}));
-                }}>
-                <Icon
-                  name="camera-outline"
-                  color={'#1D7870'}
-                  size={iconSize}></Icon>
-              </TouchableOpacity>
+              {!cameraData.recording ? (
+                <TouchableOpacity
+                  style={{
+                    ...buttonStyle,
+                    height: circleRadius,
+                    width: circleRadius,
+                    borderRadius: circleRadius / 2,
+                    alignItems: 'center',
+                  }}
+                  onPress={async () => {
+                    if (!camera.current) return;
+                    const image = await camera.current.takePhoto();
+                    setCameraData(prev => ({...prev, image}));
+                  }}>
+                  <Icon
+                    icon={Icons.CameraOutline}
+                    color={'#1D7870'}
+                    size={iconSize}></Icon>
+                </TouchableOpacity>
+              ) : null}
               <TouchableOpacity
                 style={{
                   ...buttonStyle,
@@ -125,21 +128,23 @@ const TestCamera = () => {
                   setCameraData(prev => ({...prev, recording: !recording}));
                 }}>
                 <Icon
-                  name="camera-enhance-outline"
+                  icon={Icons.CameraEnhanceOutline}
                   color={'#1D7870'}
                   size={iconSize}></Icon>
               </TouchableOpacity>
-              <Checkbox
-                color={cameraData.testData ? '#1D7870' : '#1C2128'}
-                style={{height: iconSize, width: iconSize}}
-                value={cameraData.testData}
-                onValueChange={value =>
-                  setCameraData(previous => ({
-                    ...previous,
-                    testData: value,
-                    image: undefined,
-                  }))
-                }></Checkbox>
+              {!cameraData.recording ? (
+                <Checkbox
+                  color={cameraData.testData ? '#1D7870' : '#1C2128'}
+                  style={{height: iconSize, width: iconSize}}
+                  value={cameraData.testData}
+                  onValueChange={value =>
+                    setCameraData(previous => ({
+                      ...previous,
+                      testData: value,
+                      image: undefined,
+                    }))
+                  }></Checkbox>
+              ) : null}
             </View>
             <View
               style={{
@@ -195,7 +200,7 @@ const TestCamera = () => {
       )}
 
       <FooterNavigator />
-    </View>
+    </ScrollView>
   );
 };
 

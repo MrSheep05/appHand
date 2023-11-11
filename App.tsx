@@ -5,8 +5,6 @@ import {Paths} from './src/types/routes';
 import BluetoothConnectView from './src/views/BluetoothConnectView';
 import BluetoothOffView from './src/views/BluetoothOffView';
 import ControlsView from './src/views/ControlsView';
-// import CameraView from './src/views/CameraView';
-import Constants from 'expo-constants';
 import TestCamera from './src/views/TestCamera';
 
 export default function App() {
@@ -14,9 +12,14 @@ export default function App() {
     <StateComponent>
       <MemoryRouter>
         <Routes>
-          <Route path={Paths.CameraPage} element={<TestCamera />}></Route>
           <Route
-            path={Paths.BluetoothConnectionPage}
+            path={
+              // Paths.CameraPage
+              '/'
+            }
+            element={<TestCamera />}></Route>
+          <Route
+            path={Paths.BluetoothConnectionPage + 'ds'}
             element={<BluetoothConnectView />}
           />
           <Route path={Paths.BluetoothOffPage} element={<BluetoothOffView />} />

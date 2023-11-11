@@ -1,19 +1,17 @@
 import {
   Camera,
-  Frame,
   PhotoFile,
   runAsync,
   useCameraDevice,
+  useCameraFormat,
   useFrameProcessor,
 } from 'react-native-vision-camera';
 import {Children} from '../types';
 import {vmax, vmin} from '../utils/styles';
 import {ImageBackground, Platform, StyleSheet, Text, View} from 'react-native';
 import {useCallback, useContext, useEffect, useState} from 'react';
-import usePredictBend from '../hooks/usePredictBend';
 import {Worklets} from 'react-native-worklets-core';
 import {predictArmBend} from '../utils/armFrameProcessorPlugin';
-import useDevice from '../hooks/useDevice';
 import {StateContext} from '../utils/state';
 import {Actions} from '../utils/state.types';
 import {SERVER_ADDRESS} from '../utils';
@@ -35,7 +33,6 @@ const CameraOverlay = ({children}: {children?: Children}) => {
     </View>
   );
 };
-//ඞ
 
 const CameraWidget = ({
   children,
@@ -48,9 +45,7 @@ const CameraWidget = ({
   isRecording: boolean;
   image?: PhotoFile;
 }) => {
-  useDevice();
   const {dispatch} = useContext(StateContext);
-  const {sendData} = usePredictBend();
   const update = Worklets.createRunInJsFn((data: Message) =>
     dispatch({
       type: Actions.setPosition,
@@ -72,13 +67,16 @@ const CameraWidget = ({
       }
     });
   }, []);
-  const device = useCameraDevice('back', {
-    physicalDevices: ['ultra-wide-angle-camera'],
-  });
-
+  const device = useCameraDevice('back');
+  const format = useCameraFormat(device, [
+    {
+      photoAspectRatio: 9 / 16,
+      photoResolution: 'max',
+    },
+  ]);
   // const devices = useCameraDevices();
   return (
-    <View style={{width: '100%', height: '100%'}}>
+    <View style={{width: vmin(100), height: vmax(100)}}>
       {image ? (
         <ImageBackground
           resizeMethod="resize"
@@ -92,7 +90,7 @@ const CameraWidget = ({
         />
       ) : (
         <Camera
-          zoom={1}
+          format={format}
           frameProcessor={isRecording ? frameProcessor : undefined}
           orientation="portrait"
           ref={innerRef}
